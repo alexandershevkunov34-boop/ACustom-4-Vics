@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "dev.alexandrs.acustom4vics.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["HeldItemRendererMixin", "GameRendererMixin"],
+  "injectors": { "defaultRequire": 1 }
+}
