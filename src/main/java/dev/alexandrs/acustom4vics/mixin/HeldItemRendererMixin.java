@@ -18,11 +18,19 @@ public abstract class HeldItemRendererMixin {
     private void acustom4vics$beforeRender(AbstractClientPlayerEntity player, float tickProgress,
         float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress,
         MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (GunCompat.isPointBlankGun(item)) {
-            matrices.push();
-            matrices.translate(Config.x, Config.y, Config.z);
-            matrices.scale(Config.scale, Config.scale, Config.scale);
-        }
+        if (!GunCompat.isPointBlankGun(item)) return;
+
+        matrices.push();
+        matrices.translate(Config.x, Config.y, Config.z);
+
+        // A weapon-only zoom approximation: unlike GameRenderer#getFov this
+        // never changes the world/camera projection or the FOV of other items.
+        float halfAngle = (float) Math.toRadians(Config.fov * 0.5f);
+        float zoom = (float) (1.0 / Math.tan(halfAngle));
+        float base = (float) (1.0 / Math.tan(Math.toRadians(45.0)));
+        float weaponFovScale = Math.max(0.25f, Math.min(4.0f, zoom / base));
+        float finalScale = Config.scale * weaponFovScale;
+        matrices.scale(finalScale, finalScale, finalScale);
     }
 
     @Inject(method = "renderFirstPersonItem", at = @At("RETURN"))
