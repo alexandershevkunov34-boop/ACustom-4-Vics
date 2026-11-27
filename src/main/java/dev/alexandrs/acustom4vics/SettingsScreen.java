@@ -15,13 +15,15 @@ public final class SettingsScreen extends Screen {
     @Override protected void init() {
         sliders.clear();
         int w = 220, x = this.width / 2 - w / 2, y = this.height / 2 - 78;
-        addSlider("FOV", Config.fov, 30, 120, x, y, v -> Config.fov = v); y += 27;
+        addSlider("Weapon FOV (zoom)", Config.fov, 30, 120, x, y, v -> Config.fov = v); y += 27;
         addSlider("X position", Config.x, -1.5f, 1.5f, x, y, v -> Config.x = v); y += 27;
         addSlider("Y position", Config.y, -1.5f, 1.5f, x, y, v -> Config.y = v); y += 27;
         addSlider("Z position", Config.z, -2f, 2f, x, y, v -> Config.z = v); y += 27;
         addSlider("Weapon scale", Config.scale, 0.25f, 2.5f, x, y, v -> Config.scale = v); y += 34;
         addDrawableChild(ButtonWidget.builder(Text.literal("Reset"), b -> {
-            Config.x=0; Config.y=0; Config.z=0; Config.scale=1; Config.fov=90; clearAndInit();
+            Config.x=0; Config.y=0; Config.z=0; Config.scale=1; Config.fov=90;
+            Config.save();
+            clearAndInit();
         }).dimensions(x, y, 105, 20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Save & close"), b -> {
             Config.clamp(); Config.save(); close();
@@ -36,7 +38,11 @@ public final class SettingsScreen extends Screen {
         context.drawCenteredTextWithShadow(textRenderer, title, width/2, height/2-105, 0xFFFFFF);
         super.render(context, mouseX, mouseY, delta);
     }
-    @Override public void close() { if (client != null) client.setScreen(null); }
+    @Override public void close() {
+        Config.clamp();
+        Config.save();
+        if (client != null) client.setScreen(null);
+    }
     private static final class ConfigSlider extends SliderWidget {
         private final String label; private final float min,max; private final java.util.function.Consumer<Float> setter;
         ConfigSlider(int x,int y,int w,int h,String label,float value,float min,float max,java.util.function.Consumer<Float> setter) {
