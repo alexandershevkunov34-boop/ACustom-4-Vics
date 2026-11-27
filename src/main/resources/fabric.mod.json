@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "acustom4vics",
+  "version": "${version}",
+  "name": "ACustom 4 Vic's",
+  "description": "Client-side FOV and first-person weapon positioning controls for Vic's Point Blank.",
+  "authors": ["alexandrs"],
+  "environment": "client",
+  "entrypoints": { "client": ["dev.alexandrs.acustom4vics.ACustom4VicsClient"] },
+  "mixins": ["acustom4vics.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": { "pointblank": "*" }
+}
