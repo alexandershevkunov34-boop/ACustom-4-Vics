@@ -1,7 +1,7 @@
 plugins {
     id 'fabric-loom' version '1.8.13'
 }
-version = '1.0.0'
+version = '1.0.4'
 group = 'dev.alexandrs'
 base { archivesName = 'ACustom4Vics' }
 
